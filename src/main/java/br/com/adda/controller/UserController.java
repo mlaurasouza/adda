@@ -1,7 +1,7 @@
 package br.com.adda.controller;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,34 +10,31 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import br.com.adda.model.User;
-import br.com.adda.repository.UserRepository;
+import br.com.adda.service.UserService;
 
 @RestController
 public class UserController {
-	
+
 	@Autowired
-	UserRepository repository;
-	
+	private UserService userService;
+
 	@GetMapping("/user")
-	public List<User> get(){
-		return repository.findAll();
+	public ResponseEntity<?> get() {
+		return userService.listUsers();
 	}
-	
+
 	@PostMapping("/user")
-	public String add(@RequestBody User user) {
-		repository.save(user);
-		return "Usuário cadastrado com sucesso";
+	public ResponseEntity<?> add(@RequestBody User user) {
+		return userService.addUser(user);
 	}
-	
+
 	@DeleteMapping("/user/{id}")
-	public String remove(@PathVariable Long id) {
-		repository.deleteById(id);
-		return "Usuário removido com sucesso";
+	public ResponseEntity<?> remove(@PathVariable Long id) {
+		return userService.removeUser(id);
 	}
-	
+
 	@PutMapping("/user")
-	public String update(@RequestBody User user) {
-		repository.save(user); 
-		return "Usuário atualizado com sucesso";
+	public ResponseEntity<?> update(@RequestBody User user) {
+		return userService.updateUser(user);
 	}
 }
