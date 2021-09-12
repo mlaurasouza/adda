@@ -39,17 +39,7 @@ public class UserService {
 				repository.save(user);
 				return new ResponseEntity<>("Usuário cadastrado com sucesso!", HttpStatus.OK);
 			} else {
-				user.setId(registeredUser.getId());
-
-				String decodedPassword = new String(Base64.decodeBase64(registeredUser.getPassword().getBytes()));
-
-				if (decodedPassword.equals(user.getPassword())) {
-					user.setPassword(registeredUser.getPassword());
-				} else {
-					user.setPassword(encodedPassword(user.getPassword()));
-				}
-
-				return updateUser(user);
+				return new ResponseEntity<>("Usuário já cadastrado!", HttpStatus.BAD_REQUEST);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -70,6 +60,21 @@ public class UserService {
 
 	public ResponseEntity<?> updateUser(User user) {
 		try {
+
+			User registeredUser = repository.findByEmailAndPhone(user.getEmail(), user.getPhone());
+			
+			if (Objects.isNull(user.getId())) {
+				user.setId(registeredUser.getId());
+			}
+			
+			String decodedPassword = new String(Base64.decodeBase64(registeredUser.getPassword().getBytes()));
+
+			if (decodedPassword.equals(user.getPassword())) {
+				user.setPassword(registeredUser.getPassword());
+			} else {
+				user.setPassword(encodedPassword(user.getPassword()));
+			}
+
 			repository.save(user);
 			return new ResponseEntity<>("Usuário atualizado com sucesso!", HttpStatus.OK);
 		} catch (Exception e) {
