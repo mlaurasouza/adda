@@ -87,4 +87,10 @@ public class UserService {
 		return new String(Base64.encodeBase64(password.getBytes()));
 
 	}
+	
+	public User getByEmail(String email) {
+		User user = new User();
+		return user;
+	}
+
 }
