@@ -30,7 +30,7 @@ import br.com.adda.model.User;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-	public static final int TOKEN_EXPIRACAO = 600_000;
+//	public static final int TOKEN_EXPIRACAO = 600_000_000;
 	public static final String TOKEN_SENHA = "2517fe10-1e7b-4e9d-8155-f3e3fb6e74f3";
 
 	private final AuthenticationManager authenticationManager;
@@ -60,7 +60,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		UserDetailData userData = (UserDetailData) authResult.getPrincipal();
 
 		String token = JWT.create().withSubject(userData.getUsername())
-				.withExpiresAt(new Date(System.currentTimeMillis() + TOKEN_EXPIRACAO))
+//				.withExpiresAt(new Date(System.currentTimeMillis() + TOKEN_EXPIRACAO))
 				.sign(Algorithm.HMAC512(TOKEN_SENHA));
 
 		response.getWriter().write(token);

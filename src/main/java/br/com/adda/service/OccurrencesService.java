@@ -12,10 +12,10 @@ import br.com.adda.repository.OccurrencesRepository;
 
 @Service
 public class OccurrencesService {
-	
+
 	@Autowired
 	OccurrencesRepository repository;
-	
+
 	public ResponseEntity<?> listOccurrences() {
 		try {
 			List<Occurrences> occurrences = repository.findAll();
@@ -26,17 +26,18 @@ public class OccurrencesService {
 					HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	public ResponseEntity<?> addOccurrences(Occurrences occurrences) {
 		try {
-			 repository.save(occurrences);
-			 return new ResponseEntity<>("Ocorrência cadastrada com sucesso!", HttpStatus.OK);
+			occurrences.getOccurrenceDate().setTime(occurrences.getOccurrenceDate().getTime() + 10800000);
+			repository.save(occurrences);
+			return new ResponseEntity<>("Ocorrência cadastrada com sucesso!", HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>("Não foi possível cadastrar esta ocorrência! Motivo: " + e.getMessage(),
 					HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	public ResponseEntity<?> removeOccurrences(Long id) {
 		try {
 			repository.deleteById(id);
