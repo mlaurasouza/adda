@@ -50,6 +50,7 @@ public class OccurrencesService {
 
 	public ResponseEntity<?> updateOccurrences(Occurrences occurrences) {
 		try {
+			occurrences.getOccurrenceDate().setTime(occurrences.getOccurrenceDate().getTime() + 10800000);
 			repository.save(occurrences);
 			return new ResponseEntity<>("Ocorrência atualizada com sucesso!", HttpStatus.OK);
 		} catch (Exception e) {
