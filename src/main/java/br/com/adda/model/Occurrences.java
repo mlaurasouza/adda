@@ -8,6 +8,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name="occurrences")
@@ -24,7 +28,10 @@ public class Occurrences implements Serializable {
 	private Long id;	
 	private int categoryId;
 	private Long userId;
+	
+	@Type(type="date")
 	private Date occurrenceDate;
+	
 	private String latitude;
 	private String longitude;
 	private String description;

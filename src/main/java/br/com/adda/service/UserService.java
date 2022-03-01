@@ -37,6 +37,22 @@ public class UserService {
 					HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	public ResponseEntity<?> getUserByEmail(String email) {
+		try {
+			Optional<User> user = repository.findByEmail(email);
+			
+			if (user.isEmpty()) {
+				return new ResponseEntity<>("O usuário com email " + email + " não foi encontrado!",
+						HttpStatus.BAD_REQUEST);
+			}
+
+			return new ResponseEntity<>(user.get(), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>("Não foi possível consultar usuário pelo email! Motivo: " + e.getMessage(),
+					HttpStatus.BAD_REQUEST);
+		}
+	}
 
 	public ResponseEntity<?> addUser(User user) {
 		try {

@@ -51,4 +51,10 @@ public class UserController {
 	public ResponseEntity<?> resetPassword(@RequestParam String email) {
 		return userService.resetPassword(email);
 	}
+	
+	@ApiOperation(value = "Busca usuário pelo e-mail")
+	@GetMapping("/user/{email}")
+	public ResponseEntity<?> getByEmail(@PathVariable String email) {
+		return userService.getUserByEmail(email);																																			
+	}
 }

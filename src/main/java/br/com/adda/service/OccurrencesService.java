@@ -1,5 +1,7 @@
 package br.com.adda.service;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,14 @@ public class OccurrencesService {
 	public ResponseEntity<?> listOccurrences() {
 		try {
 			List<Occurrences> occurrences = repository.findAll();
+			
+			Calendar calendar = Calendar.getInstance();
+			
+			for (Occurrences occurrence: occurrences) {
+				calendar.setTime(occurrence.getOccurrenceDate());
+				Date date = calendar.getTime();
+				occurrence.setOccurrenceDate(date);
+			}
 
 			return new ResponseEntity<>(occurrences, HttpStatus.OK);
 		} catch (Exception e) {
@@ -29,7 +39,7 @@ public class OccurrencesService {
 
 	public ResponseEntity<?> addOccurrences(Occurrences occurrences) {
 		try {
-			occurrences.getOccurrenceDate().setTime(occurrences.getOccurrenceDate().getTime() + 10800000);
+//			occurrences.getOccurrenceDate().setTime(occurrences.getOccurrenceDate().getTime() + 10800000);
 			repository.save(occurrences);
 			return new ResponseEntity<>("Ocorrência cadastrada com sucesso!", HttpStatus.OK);
 		} catch (Exception e) {
