@@ -14,14 +14,17 @@ public class EmailSenderUtil {
 	private JavaMailSender javaMailSender;
 
 	public void sendMail(Email email) {
+		try {
+			SimpleMailMessage message = new SimpleMailMessage();
+			message.setFrom(email.getSender());
+			message.setTo(email.getReceiver());
+			message.setSubject(email.getSubject());
+			message.setText(email.getBody());
 
-		SimpleMailMessage message = new SimpleMailMessage();
-		message.setFrom(email.getSender());
-		message.setTo(email.getReceiver());
-		message.setSubject(email.getSubject());
-		message.setText(email.getBody());
-
-		javaMailSender.send(message);
+			javaMailSender.send(message);	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

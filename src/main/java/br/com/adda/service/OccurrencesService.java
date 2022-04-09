@@ -1,17 +1,31 @@
 package br.com.adda.service;
 
 import java.util.List;
+import java.util.Optional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.querydsl.core.QueryResults;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+
 import br.com.adda.model.Occurrences;
 import br.com.adda.repository.OccurrencesRepository;
 
 @Service
 public class OccurrencesService {
+
+	@PersistenceContext(type = PersistenceContextType.EXTENDED)
+	private EntityManager entityManager;
 
 	@Autowired
 	OccurrencesRepository repository;
@@ -27,9 +41,24 @@ public class OccurrencesService {
 		}
 	}
 
+	public ResponseEntity<?> listOccurrencesByUserId(Long userId) {
+		try {
+
+			JPAQueryFactory query = new JPAQueryFactory(entityManager);
+
+			br.com.adda.model.QOccurrences occurrence = br.com.adda.model.QOccurrences.occurrences;
+			List<Occurrences> occurrencesList = query.selectFrom(occurrence).where(occurrence.userId.eq(userId))
+					.fetch();
+
+			return new ResponseEntity<>(occurrencesList, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>("Não foi possível buscar as ocorrências cadastradas! Motivo: " + e.getMessage(),
+					HttpStatus.BAD_REQUEST);
+		}
+	}
+
 	public ResponseEntity<?> addOccurrences(Occurrences occurrences) {
 		try {
-			occurrences.getOccurrenceDate().setTime(occurrences.getOccurrenceDate().getTime() + 10800000);
 			repository.save(occurrences);
 			return new ResponseEntity<>("Ocorrência cadastrada com sucesso!", HttpStatus.OK);
 		} catch (Exception e) {
@@ -50,7 +79,6 @@ public class OccurrencesService {
 
 	public ResponseEntity<?> updateOccurrences(Occurrences occurrences) {
 		try {
-			occurrences.getOccurrenceDate().setTime(occurrences.getOccurrenceDate().getTime() + 10800000);
 			repository.save(occurrences);
 			return new ResponseEntity<>("Ocorrência atualizada com sucesso!", HttpStatus.OK);
 		} catch (Exception e) {

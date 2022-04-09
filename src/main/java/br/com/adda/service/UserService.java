@@ -115,9 +115,9 @@ public class UserService {
 
 	private void sendEmail(String email, String newPassword) throws Exception {
 		Email newEmail = new Email();
-		newEmail.setSender("Atendimento ADDA<atendimento.adda@gmail.com>");
+		newEmail.setSender("Atendimento Colmeia<atendimento.adda@gmail.com>");
 		newEmail.setReceiver(email);
-		newEmail.setSubject("[ADDA] Senha temporária");
+		newEmail.setSubject("[Colmeia] Senha temporária");
 		newEmail.setBody("Sua senha temporária: " + newPassword);
 
 		emailSenderUtil.sendMail(newEmail);
