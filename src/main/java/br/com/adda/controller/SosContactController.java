@@ -24,6 +24,11 @@ public class SosContactController {
 		return sosContactService.listSosContact();
 	}
 	
+	@GetMapping("/sos_contact/{userId}")
+	public ResponseEntity<?> getById(@PathVariable Long userId) {
+		return sosContactService.listSosContactByUserId(userId);
+	}
+	
 	@PostMapping("/sos_contact")
 	public ResponseEntity<?> add(@RequestBody SosContact sosContact) {
 		return sosContactService.addSosContact(sosContact);
