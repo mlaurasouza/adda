@@ -1,11 +1,8 @@
 package br.com.adda.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
 
@@ -14,10 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.querydsl.core.QueryResults;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import br.com.adda.enums.OccurrenceEnum;
 import br.com.adda.model.Occurrences;
 import br.com.adda.repository.OccurrencesRepository;
 
@@ -29,10 +25,14 @@ public class OccurrencesService {
 
 	@Autowired
 	OccurrencesRepository repository;
-
+	
 	public ResponseEntity<?> listOccurrences() {
 		try {
 			List<Occurrences> occurrences = repository.findAll();
+			
+			for (Occurrences oc : occurrences) {
+				oc.setCategoryName(OccurrenceEnum.valueOf("O" + oc.getCategoryId()).getOccurenceName());
+			}
 
 			return new ResponseEntity<>(occurrences, HttpStatus.OK);
 		} catch (Exception e) {

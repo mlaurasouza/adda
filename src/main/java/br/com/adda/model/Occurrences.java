@@ -2,15 +2,13 @@ package br.com.adda.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import org.springframework.format.annotation.DateTimeFormat;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -37,8 +35,11 @@ public class Occurrences implements Serializable {
 	private String longitude;
 	private String description;
 	
+	@Transient
+	private String categoryName;
+	
 	public Occurrences(Long id, int categoryId, Long userId, LocalDateTime occurrenceDate, String latitude, String longitude,
-			String description) {
+			String description, String categoryName) {
 		this.id = id;
 		this.categoryId = categoryId;
 		this.userId = userId;
@@ -46,6 +47,7 @@ public class Occurrences implements Serializable {
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.description = description;
+		this.categoryName = categoryName;
 	}
 
 	public Occurrences() {
@@ -105,6 +107,14 @@ public class Occurrences implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getCategoryName() {
+		return categoryName;
+	}
+
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
 	}
 
 	public static long getSerialversionuid() {
